@@ -9,7 +9,8 @@
 <title>ユーザー情報</title>
 <jsp:include page="/baselayout/head.html" />
 <%
-	String validationMessage = (String) request.getAttribute("validationMessage");
+    ArrayList<BuyDataBeans> buyList = (ArrayList<BuyDataBeans>) request.getAttribute("buyList");
+    String validationMessage = (String) request.getAttribute("validationMessage");
 	UserDataBeans udb = (UserDataBeans)request.getAttribute("udb");
 %>
 </head>
@@ -58,37 +59,35 @@
 			</div>
 		</div>
 		<!--  購入履歴 -->
-		<div class="row">
-			<div class="col s12">
-				<div class="card grey lighten-5">
-					<div class="card-content">
-						<table class="bordered">
-							<thead>
-								<tr>
-									<th style="width: 10%"></th>
-									<th class="center">購入日時</th>
-									<th class="center">配送方法</th>
-									<th class="center">購入金額</th>
-								</tr>
-							</thead>
-							<tbody>
-
-								<tr>
-									<td class="center"><a href="UserBuyHistoryDetail?buy_id=1" class="btn-floating btn waves-effect waves-light "> <i class="material-icons">details</i></a></td>
-									<td class="center">1234年56月78日90時12分</td>
-									<td class="center">サンプル配送料金</td>
-									<td class="center"><123456789円円</td>
-								</tr>
-								<tr>
-									<td class="center"><a href="UserBuyHistoryDetail?buy_id=2" class="btn-floating btn waves-effect waves-light "> <i class="material-icons">details</i></a></td>
-									<td class="center">1234年56月78日90時12分</td>
-									<td class="center">サンプル配送料金</td>
-									<td class="center"><123456789円円</td>
-								</tr>
-
-							</tbody>
-						</table>
-					</div>
+		<div class="col s12">
+			<div class="card grey lighten-5">
+				<div class="card-content">
+					<table class="bordered">
+						<thead>
+							<tr>
+								<th style="width: 10%"></th>
+								<th class="center">購入日時</th>
+								<th class="center">配送方法</th>
+								<th class="center">購入金額</th>
+							</tr>
+						</thead>
+						<%
+						int i = 0;
+						for (BuyDataBeans item : buyList) {
+							i++;
+						%>
+						<tbody>
+							<tr>
+								<td class="center"><a href="UserBuyHistoryDetail?buy_id=<%=item.getId()%>" class="btn-floating btn waves-effect waves-light "> <i class="material-icons">details</i></a></td>
+								<td class="center"><%=item.getFormatDate()%></td>
+								<td class="center"><%=item.getDeliveryMethodName()%></td>
+								<td class="center"><%=item.getTotalPrice()%>円</td>
+							</tr>
+						</tbody>
+						<%
+						}
+						%>
+					</table>
 				</div>
 			</div>
 		</div>

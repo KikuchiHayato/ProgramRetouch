@@ -5,8 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import base.DBManager;
+import beans.BuyDataBeans;
 import beans.UserDataBeans;
 import ec.EcHelper;
 
@@ -104,7 +107,8 @@ public class UserDAO {
 	 * @throws SQLException
 	 *             呼び出し元にcatchさせるためスロー
 	 */
-	public static UserDataBeans getUserDataBeansByUserId(int userId) throws SQLException {
+	public static UserDataBeans getUserDataBeansByUserId(int userId)
+			throws SQLException {
 		UserDataBeans udb = new UserDataBeans();
 		Connection con = null;
 		PreparedStatement st = null;
@@ -134,6 +138,48 @@ public class UserDAO {
 		System.out.println("searching UserDataBeans by userId has been completed");
 		return udb;
 	}
+
+	//作成
+	public static ArrayList<BuyDataBeans> getBuyDataBeansByUserId(int userId)
+			throws SQLException {
+		Connection con = null;
+		PreparedStatement st = null;
+		try {
+			con = DBManager.getConnection();
+			st = con.prepareStatement("SELECT * FROM t_buy "
+											  + " JOIN m_delivery_method"
+											  + " ON t_buy.delivery_method_id = m_delivery_method.id"
+											  + " WHERE t_buy.user_id = ?");
+			st.setInt(1, userId);
+			ResultSet rs = st.executeQuery();
+			ArrayList<BuyDataBeans> buyList = new ArrayList<BuyDataBeans>();
+
+			while (rs.next()) {
+				BuyDataBeans bdb = new BuyDataBeans();
+				bdb.setId(rs.getInt("t_buy.id"));
+				bdb.setTotalPrice(rs.getInt("total_price"));
+				bdb.setBuyDate(rs.getTimestamp("create_date"));
+				bdb.setDelivertMethodId(rs.getInt("delivery_method_id"));
+				bdb.setUserId(rs.getInt("user_id"));
+				bdb.setDeliveryMethodPrice(rs.getInt("price"));
+				bdb.setDeliveryMethodName(rs.getString("name"));
+				buyList.add(bdb);
+			}
+			Collections.reverse(buyList);
+
+			System.out.println("searching UserDataBeans by userId has been completed");
+			return buyList;
+
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			throw new SQLException(e);
+		} finally {
+			if (con != null) {
+				con.close();
+			}
+		}
+	}
+	//
 
 	/**
 	 * ユーザー情報の更新処理を行う。
