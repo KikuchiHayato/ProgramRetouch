@@ -38,7 +38,7 @@
 								<tr>
 									<td class="center"><%=bdb.getFormatDate()%></td>
 									<td class="center"><%=bdb.getDeliveryMethodName()%></td>
-									<td class="center"><%=bdb.getTotalPrice()%></td>
+									<td class="center"><%=bdb.getTotalPrice()%>円</td>
 								</tr>
 							</tbody>
 						</table>
@@ -66,7 +66,7 @@
 							<tbody>
 								<tr>
 									<td class="center"><%=item.getName()%></td>
-									<td class="center"><%=item.getPrice()%></td>
+									<td class="center"><%=item.getPrice()%>円</td>
 								</tr>
 							</tbody>
 							<%
